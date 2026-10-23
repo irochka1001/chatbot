@@ -1,8 +1,8 @@
 {
-  "name": "mercurio-chatbot",
+  "name": "chef-carlo-chatbot",
   "version": "1.0.0",
   "private": true,
-  "description": "A chatbot whose personality changes with the temperature you set.",
+  "description": "Chef Carlo: a cooking chatbot whose mood follows the temperature bar.",
   "type": "module",
   "engines": { "node": ">=20" }
 }

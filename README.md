@@ -1,56 +1,46 @@
-# Mercurio, the moody thermometer 🌡️
+# Chef Carlo 👨‍🍳
 
-A chatbot whose personality changes with the temperature you set.
-Drag the thermometer and Mercurio changes from a frozen bureaucrat (−30 °C) to a grumpy Viennese
-waiter, a smug room-temperature assistant, an over-caffeinated football commentator, and finally
-a boiling, pigeon-suspicious meltdown (60 °C).
+A cooking chatbot that only talks about cuisines, dishes and recipes.
+The **temperature bar** sets Carlo's mood, which changes how he answers:
 
-## How the temperature changes the bot
-
-| Reading | Mood | What Claude is told |
+| Temperature | Mood | How he answers |
 |---|---|---|
-| −30 to −5 °C | Frozen solid | 8 words max, glacial, can't feel its bulb |
-| −4 to 12 °C | Chilly | Dry sarcasm, Viennese-waiter disdain |
-| 13 to 26 °C | Room temperature | Warm, helpful, smug about being calibrated |
-| 27 to 40 °C | Sweaty | Cup-final commentator energy, emojis |
-| 41 to 60 °C | Meltdown | Unhinged poetry, Italian exclamations, pigeons |
+| −20 to −5° | Ice-cold Carlo | Strict Michelin inspector, exact grams, no small talk, hearty dishes |
+| −4 to 9° | Grumpy Carlo | Sarcastic purist, sighs at shortcuts, slow-cooked classics |
+| 10 to 24° | Happy Carlo | Warm, patient cooking teacher |
+| 25 to 37° | Fired-up Carlo | Loud and fast, loves bold, spicy food |
+| 38 to 50° | Meltdown Carlo | Kitchen chaos, wild (but working) fusion recipes |
 
-The reading is also turned into a **chaos level** from 0.00 to 1.00 that goes into the prompt.
-Newer Claude models (like Haiku 5.5) don't accept a `temperature` setting, so the slider steers the
-personality through the prompt instead. If you switch to an older model that does accept it,
-add `USE_SAMPLING_TEMPERATURE=true` in Vercel and the slider controls the real sampling temperature too.
+The bar also sets the **real model temperature** (0 to 1.3) sent to OpenAI, so colder Carlo is
+more predictable and hotter Carlo is more creative.
+
+Carlo's face, colours and steam/sweat/icicles follow his mood. The dish he holds, his neckerchief
+and hat band follow the cuisine of the conversation (14 cuisines). The AI tags each reply with its
+cuisine, and the page updates the picture.
+
+## Features
+
+- **Cuisine kitchens:** colours, background pattern, header and greeting change with the cuisine.
+- **Recipe cards:** time and difficulty, ingredients you can tick off, numbered steps, "Copy shopping list".
+- **Servings adjuster:** 1, 2, 4 or 6 people; every quantity recalculates.
+- **Diet switches:** vegetarian, vegan, gluten-free, dairy-free, no pork. Carlo must obey them.
+- **Food passport:** a stamp for each of the 14 cuisines you visit (saved in your browser).
 
 ## Files
 
 ```
-index.html     the page
-style.css      the five colour themes and the thermometer
-app.js         thermometer dragging, chat, offline replies
-api/chat.js    the server function that talks to Claude (keeps your key secret)
+index.html     the page and Carlo's drawing
+style.css      the five mood themes
+app.js         temperature bar, chat, cuisine plate, offline replies
+api/chat.js    server function that talks to the AI (keeps your key secret)
 package.json   tells Vercel to use modern JavaScript
 ```
 
-Without an API key the site still works in **offline mode** with built-in joke replies.
+## Deploy
 
-## Deploy it
+1. Put these files in a GitHub repository (keep `chat.js` inside the `api` folder).
+2. On vercel.com: Add New → Project → import the repository → preset **Other**.
+3. Environment Variables: `OPENAI_API_KEY` = your key (or `ANTHROPIC_API_KEY` for Claude).
+4. Deploy. Every change on GitHub redeploys automatically.
 
-1. Get a key at https://console.anthropic.com (API keys), and add a few dollars of credit.
-2. Create a GitHub repository and upload these files (keep the `api` folder).
-3. At https://vercel.com, sign in with GitHub, choose **Add New → Project**, and import the repository.
-   Framework preset: **Other**. Leave build settings empty.
-4. In **Environment Variables**, add `ANTHROPIC_API_KEY` with your key, then **Deploy**.
-5. If you add the key after the first deploy, go to **Deployments → ⋯ → Redeploy**.
-
-Every push to GitHub redeploys the site automatically.
-
-## Change it
-
-- Personalities: edit the `ZONES` prompts in `api/chat.js`.
-- Offline jokes, mood lines, the comments Mercurio makes when you change zone: `ZONES` in `app.js`.
-- Colours: the `body[data-zone=…]` blocks at the top of `style.css`.
-- Model: set `ANTHROPIC_MODEL` in Vercel.
-
-## Safety
-
-Your key lives only in Vercel. Never paste it into `app.js` or commit it to GitHub.
-Anyone with your link can chat and spend your credit, so set a monthly spend limit in the Claude Console.
+Optional: `OPENAI_MODEL` (default `gpt-4.1-mini`).
